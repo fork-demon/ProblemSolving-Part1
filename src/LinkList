@@ -1,0 +1,138 @@
+package DS;
+
+public class LinkList {
+	
+	
+	public static boolean findLoop(Node head){
+		
+		if(head == null)
+			throw new IllegalArgumentException("LinkedList is null");
+		
+		Node slow = head;
+		Node fast = head;
+		
+		
+		while(slow.next()!= null && fast != null && fast.next()!=null){
+			slow = slow.next();
+			fast = fast.next().next();
+			
+			if(slow == fast){
+				findIntersectionPoint(slow,head);
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
+	public static Node findMergePoint(Node node1, Node node2){
+		Node reversedOne = reverseUsingRecursion(node1);
+		Node reversedtwo = reverseUsingRecursion(node2);
+		 Node prev = null;
+		 while(reversedOne.next() != null && reversedtwo.next() != null){
+			 
+			 if(!reversedOne.getValue().equals(reversedtwo.getValue())){
+				 
+				 System.out.println("Merging Node is "+prev.getValue());
+				 return prev;
+			 }
+			 prev = reversedOne;
+			 reversedOne = reversedOne.next();
+			 reversedtwo = reversedtwo.next();
+		 }
+		 return prev;
+	}
+	
+	private static Node reverseUsingRecursion(Node head){
+		
+	 if(head == null) return null;
+	 
+	 if(head.next() == null) return head;
+	 
+	 Node rest = reverseUsingRecursion(head.next());
+	 
+	 head.next().setNext(head);
+	 head.setNext(null);
+	 return rest;
+	}
+	
+	private static void findIntersectionPoint(Node slow, Node head) {
+		
+		while(head != slow){
+			head = head.next();
+			slow= slow.next();
+		}
+		System.out.println("merging node is "+slow.getValue());
+	
+	}
+
+	public static void main(String[] args) {
+		Node n1 = new Node("A");
+		Node n2 = new Node("B");
+		Node n3 = new Node("C");
+		Node n4 = new Node("D");
+		Node n5 = new Node("E");
+		Node n6 = new Node("F");
+		
+		Node m1 = new Node("M");
+		Node m2 = new Node("X");
+		Node m3 = new Node("C");
+		Node m4 = new Node("D");
+		Node m5 = new Node("E");
+		Node m6 = new Node("F");
+		
+		n1.setNext(n2);
+		n2.setNext(n3);
+		n3.setNext(n4);
+		n4.setNext(n5);
+		n5.setNext(n6);
+		n6.setNext(null);
+		
+		m1.setNext(m2);
+		m2.setNext(m3);
+		m3.setNext(m4);
+		m4.setNext(m5);
+		m5.setNext(m6);
+		m6.setNext(null);
+		
+		System.out.println(findLoop(n1));
+		
+		/*Node x=reverseUsingRecursion(n1);
+		while(x!=null){
+			
+			System.out.println(x.getValue());
+			x = x.next();
+			
+		}*/
+		
+		findMergePoint(n1,m1);
+		
+		
+	}
+
+}
+
+class Node{
+	private String value;
+	private Node next;
+	
+	public Node(String val) {
+		// TODO Auto-generated constructor stub
+		value = val;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
+	public Node next() {
+		return next;
+	}
+	public void setNext(Node next) {
+		this.next = next;
+	}
+	
+}
